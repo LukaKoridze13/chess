@@ -35,11 +35,10 @@ export default function Pawn(props) {
   }
   return (
     <FontAwesomeIcon
-      className={props.isSelected ? "selected" : "unselected"}
+      className={props.isSelected ? "selected figure" : "unselected figure"}
       icon={figure}
       style={{
         color: props.color === "white" ? white : black,
-        fontSize: "6vh",
         position: "relative",
         zIndex: 5,
       }}

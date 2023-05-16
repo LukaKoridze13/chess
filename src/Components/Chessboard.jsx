@@ -6,6 +6,7 @@ const letters = ["a", "b", "c", "d", "e", "f", "g", "h"];
 
 export default function Chessboard() {
   const squares = [];
+  const [turn, setTurn] = useState("white");
   const [figures, setFigures] = useState([
     {
       type: "Pawn",
@@ -135,36 +136,70 @@ export default function Chessboard() {
       isDead: false,
       isMoved: false,
     },
+    {
+      type: "Rook",
+      color: "white",
+      square: "a1",
+      isSelected: false,
+      isDead: false,
+      isMoved: false,
+    },
+    {
+      type: "Rook",
+      color: "black",
+      square: "a8",
+      isSelected: false,
+      isDead: false,
+      isMoved: false,
+    },
+    {
+      type: "Rook",
+      color: "white",
+      square: "h1",
+      isSelected: false,
+      isDead: false,
+      isMoved: false,
+    },
+    {
+      type: "Rook",
+      color: "black",
+      square: "h8",
+      isSelected: false,
+      isDead: false,
+      isMoved: false,
+    },
   ]);
   const [moves, setMoves] = useState([]);
   const [kills, setKills] = useState([]);
   const [figureIsSelected, setFigureIsSelected] = useState(null);
   function selectFigure(square, color) {
-    if (figureIsSelected === null) {
-      let selected = null;
-      let newFigures = figures.map((figure) => {
-        figure.isSelected = false;
-        if (figure.square === square) {
-          figure.isSelected = true;
-          selected = figure;
-        }
-        return figure;
-      });
-      setFigures(newFigures);
-      setFigureIsSelected(selected);
-    }
-    if (figureIsSelected !== null && figureIsSelected.color === color) {
-      let selected = null;
-      let newFigures = figures.map((figure) => {
-        figure.isSelected = false;
-        if (figure.square === square) {
-          figure.isSelected = true;
-          selected = figure;
-        }
-        return figure;
-      });
-      setFigures(newFigures);
-      setFigureIsSelected(selected);
+    if (color === turn) {
+      if (figureIsSelected === null) {
+        let selected = null;
+        let newFigures = figures.map((figure) => {
+          figure.isSelected = false;
+          if (figure.square === square) {
+            figure.isSelected = true;
+            selected = figure;
+          }
+          return figure;
+        });
+        setFigures(newFigures);
+        setFigureIsSelected(selected);
+      }
+      if (figureIsSelected !== null && figureIsSelected.color === color) {
+        let selected = null;
+        let newFigures = figures.map((figure) => {
+          figure.isSelected = false;
+          if (figure.square === square) {
+            figure.isSelected = true;
+            selected = figure;
+          }
+          return figure;
+        });
+        setFigures(newFigures);
+        setFigureIsSelected(selected);
+      }
     }
   }
   function checkIfOccupied(square) {
@@ -246,8 +281,110 @@ export default function Chessboard() {
         }
       }
     }
+    if (type === "Rook") {
+      if (color === "white") {
+        let letter = square[0];
+        let number = Number(square[1]);
+        // Top
+        for (let i = number + 1; i < 9; i++) {
+          if (checkIfOccupied(letter + i)) {
+            if (IsAnotherColor(letter + i, "white")) {
+              kills.push(letter + i);
+            }
+            break;
+          } else {
+            moves.push(letter + i);
+          }
+        }
+        // Down
+        for (let i = number + 1; i > 0; i--) {
+          if (checkIfOccupied(letter + i)) {
+            if (IsAnotherColor(letter + i, "white")) {
+              kills.push(letter + i);
+            }
+            break;
+          } else {
+            moves.push(letter + i);
+          }
+        }
+        // Left
+        for (let i = letters.indexOf(letter) - 1; i > -1; i--) {
+            console.log(letters[i] + number);
+
+          if (checkIfOccupied(letters[i] + number)) {
+            if (IsAnotherColor(letters[i] + number, "white")) {
+              kills.push(letters[i] + number);
+            }
+            break;
+          } else {
+            moves.push(letters[i] + number);
+          }
+        }
+        for (let i = letters.indexOf(letter) + 1; i < 8; i++) {
+          if (checkIfOccupied(letters[i] + number)) {
+            if (IsAnotherColor(letters[i] + number, "white")) {
+              kills.push(letters[i] + number);
+            }
+            break;
+          } else {
+            moves.push(letters[i] + number);
+          }
+        }
+      }else{
+        let letter = square[0];
+        let number = Number(square[1]);
+        // Top
+        for (let i = number + 1; i < 9; i++) {
+          if (checkIfOccupied(letter + i)) {
+            if (IsAnotherColor(letter + i, "black")) {
+              kills.push(letter + i);
+            }
+            break;
+          } else {
+            moves.push(letter + i);
+          }
+        }
+        // Down
+        for (let i = number + 1; i > 0; i--) {
+          if (checkIfOccupied(letter + i)) {
+            if (IsAnotherColor(letter + i, "black")) {
+              kills.push(letter + i);
+            }
+            break;
+          } else {
+            moves.push(letter + i);
+          }
+        }
+        // Left
+        for (let i = letters.indexOf(letter) - 1; i > -1; i--) {
+          console.log(letters[i] + number);
+
+          if (checkIfOccupied(letters[i] + number)) {
+            if (IsAnotherColor(letters[i] + number, "black")) {
+              kills.push(letters[i] + number);
+            }
+            break;
+          } else {
+            moves.push(letters[i] + number);
+          }
+        }
+        for (let i = letters.indexOf(letter) + 1; i < 8; i++) {
+          if (checkIfOccupied(letters[i] + number)) {
+            if (IsAnotherColor(letters[i] + number, "black")) {
+              kills.push(letters[i] + number);
+            }
+            break;
+          } else {
+            moves.push(letters[i] + number);
+          }
+        }
+      }
+    }
     setMoves(moves);
     setKills(kills);
+  }
+  function changeTurn() {
+    turn === "white" ? setTurn("black") : setTurn("white");
   }
   function move(square) {
     if (moves.includes(square) && figureIsSelected !== null) {
@@ -260,6 +397,7 @@ export default function Chessboard() {
       setMoves([]);
       setKills([]);
       selectFigure();
+      changeTurn();
     }
   }
   function kill(square) {
@@ -279,6 +417,7 @@ export default function Chessboard() {
       setMoves([]);
       setKills([]);
       selectFigure();
+      changeTurn();
     }
   }
   useEffect(() => {
@@ -349,6 +488,11 @@ const Board = styled.div`
   display: grid;
   grid-template-columns: repeat(8, 1fr);
   grid-template-rows: repeat(8, 1fr);
+
+  @media screen and (orientation: portrait) {
+    width: 100vw;
+    height: 100vw;
+  }
 `;
 
 const Square = styled.div`
