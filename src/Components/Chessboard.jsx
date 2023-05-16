@@ -248,6 +248,22 @@ export default function Chessboard() {
       isDead: false,
       isMoved: false,
     },
+    {
+      type: "Queen",
+      color: "white",
+      square: "d1",
+      isSelected: false,
+      isDead: false,
+      isMoved: false,
+    },
+    {
+      type: "Queen",
+      color: "black",
+      square: "d8",
+      isSelected: false,
+      isDead: false,
+      isMoved: false,
+    },
   ]);
   const [moves, setMoves] = useState([]);
   const [kills, setKills] = useState([]);
@@ -649,7 +665,6 @@ export default function Chessboard() {
         }
       }
     }
-
     if (type === "King") {
       let letter = square[0];
       let number = Number(square[1]);
@@ -685,7 +700,116 @@ export default function Chessboard() {
         });
       }
     }
+    if (type === "Queen") {
+      let letter = square[0];
+      let number = Number(square[1]);
+      let queenMoves = [];
+      // Top
+      for (let i = number + 1; i < 9; i++) {
+        let m = letter + i
+        if (checkIfOccupied(m)) {
+          if (IsAnotherColor(m, color)) {
+            kills.push(m);
+          }
+          break;
+        } else {
+          moves.push(m);
+        }
+      }
+      // Bottom
+      for (let i = number - 1; i > 0; i--) {
+        let m = letter + i;
+        if (checkIfOccupied(m)) {
+          if (IsAnotherColor(m, color)) {
+            kills.push(m);
+          }
+          break;
+        } else {
+          moves.push(m);
+        }
+      }
+      // Left
+      for (let i = letters.indexOf(letter) - 1; i > -1; i--) {
+        let m = letters[i] + number;
+        if (checkIfOccupied(m)) {
+          if (IsAnotherColor(m, color)) {
+            kills.push(m);
+          }
+          break;
+        } else {
+          moves.push(m);
+        }
+      }
+      // Right
+      for (let i = letters.indexOf(letter) + 1; i < 8; i++) {
+        let m = letters[i] + number;
+        if (checkIfOccupied(m)) {
+          if (IsAnotherColor(m, color)) {
+            kills.push(m);
+          }
+          break;
+        } else {
+          moves.push(m);
+        }
+      }
 
+      // Right & Top
+      let x = 1;
+      for (let i = letters.indexOf(letter) + 1; i < 8; i++) {
+        let m = letters[i] + (number + x);
+        if (checkIfOccupied(m)) {
+          if (IsAnotherColor(m, color)) {
+            kills.push(m);
+          }
+          break;
+        } else {
+          moves.push(m);
+        }
+        x++;
+      }
+      // Right & Bottom
+      x = 1;
+      for (let i = letters.indexOf(letter) + 1; i < 8; i++) {
+        let m = letters[i] + (number - x);
+        if (checkIfOccupied(m)) {
+          if (IsAnotherColor(m, color)) {
+            kills.push(m);
+          }
+          break;
+        } else {
+          moves.push(m);
+        }
+        x++;
+      }
+      // Left & Top
+      x = 1;
+      for (let i = letters.indexOf(letter) - 1; i > -1; i--) {
+        let m = letters[i] + (number + x);
+        if (checkIfOccupied(m)) {
+          if (IsAnotherColor(m, color)) {
+            kills.push(m);
+          }
+          break;
+        } else {
+          moves.push(m);
+        }
+        x++;
+      }
+      // left & Bottom
+      x = 1;
+      for (let i = letters.indexOf(letter) - 1; i > -1; i--) {
+        let m = letters[i] + (number - x)
+        if (checkIfOccupied(m)) {
+          if (IsAnotherColor(m, color)) {
+            kills.push(m);
+          }
+          break;
+        } else {
+          moves.push(m);
+        }
+        x++;
+      }
+    }
     if (set) {
       setMoves(moves);
       setKills(kills);
