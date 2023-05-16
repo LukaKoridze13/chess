@@ -291,8 +291,8 @@ export default function Chessboard() {
     for (let letter = 1; letter < 9; letter++) {
       let color = "white";
       if (
-        (letter % 2 === 1 && num % 2 === 0) ||
-        (letter % 2 === 0 && num % 2 === 1)
+        (letter % 2 === 1 && num % 2 === 1) ||
+        (letter % 2 === 0 && num % 2 === 0)
       ) {
         color = "black";
       }
