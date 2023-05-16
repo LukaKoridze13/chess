@@ -168,6 +168,14 @@ export default function Chessboard() {
       isDead: false,
       isMoved: false,
     },
+    {
+      type: "Knight",
+      color: "white",
+      square: "b1",
+      isSelected: false,
+      isDead: false,
+      isMoved: false,
+    },
   ]);
   const [moves, setMoves] = useState([]);
   const [kills, setKills] = useState([]);
@@ -309,7 +317,7 @@ export default function Chessboard() {
         }
         // Left
         for (let i = letters.indexOf(letter) - 1; i > -1; i--) {
-            console.log(letters[i] + number);
+          console.log(letters[i] + number);
 
           if (checkIfOccupied(letters[i] + number)) {
             if (IsAnotherColor(letters[i] + number, "white")) {
@@ -330,7 +338,7 @@ export default function Chessboard() {
             moves.push(letters[i] + number);
           }
         }
-      }else{
+      } else {
         let letter = square[0];
         let number = Number(square[1]);
         // Top
@@ -378,6 +386,39 @@ export default function Chessboard() {
             moves.push(letters[i] + number);
           }
         }
+      }
+    }
+    if (type === "Knight") {
+      let letter = square[0];
+      let nextLetter = letters[letters.indexOf(letter) + 1];
+      let nextSecondLetter = letters[letters.indexOf(letter) + 2];
+      let prevLetter = letters[letters.indexOf(letter) - 1];
+      let prevSecondLetter = letters[letters.indexOf(letter) - 2];
+      let number = Number(square[1]);
+      let nextNumber = number + 1;
+      let nextSecondNumber = number + 2;
+      let prevNumber = number - 1;
+      let prevSecondNumber = number - 2;
+      const knightMoves = [
+        nextLetter + nextSecondNumber,
+        nextSecondLetter + nextNumber,
+        nextSecondLetter + prevNumber,
+        nextLetter + prevSecondNumber,
+        prevLetter + prevSecondNumber,
+        prevSecondLetter + prevNumber,
+        prevSecondLetter + nextNumber,
+        prevLetter + nextSecondNumber,
+      ];
+      if (color === "white") {
+        knightMoves.forEach((m) => {
+          if (checkIfOccupied(m)) {
+            if (IsAnotherColor(m, "white")) {
+              kills.push(m);
+            }
+          } else {
+            moves.push(m);
+          }
+        });
       }
     }
     setMoves(moves);
