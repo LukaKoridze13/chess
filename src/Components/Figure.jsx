@@ -35,12 +35,15 @@ export default function Pawn(props) {
   }
   return (
     <FontAwesomeIcon
-      className={props.isSelected ? "selected figure" : "unselected figure"}
+      className={`figure ${props.isSelected ? "selected" : "unselected"} ${
+        props.myColor === "white" ? "deg90" : "deg-90"
+      }`}
       icon={figure}
       style={{
         color: props.color === "white" ? white : black,
         position: "relative",
         zIndex: 5,
+        pointerEvents: props.color !== props.myColor && "none",
       }}
       onClick={props.onClick}
     />
