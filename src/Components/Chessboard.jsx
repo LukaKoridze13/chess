@@ -267,6 +267,8 @@ export default function Chessboard() {
   ]);
   const [moves, setMoves] = useState([]);
   const [kills, setKills] = useState([]);
+  const [figureKillsKing, setFigureKillsKing] = useState(null);
+  let kingKiller;
   const [figureIsSelected, setFigureIsSelected] = useState(null);
   function selectFigure(square, color) {
     if (color === turn) {
@@ -316,15 +318,30 @@ export default function Chessboard() {
     });
     return yes;
   }
-  function canGetKilled(square, color) {
+  function canGetKilled(square, color, check) {
     let can = false;
     let enemies = figures.filter((fig) => fig.color !== color);
     enemies.forEach((enemy) => {
       let results = calculateGoingAndKilling(enemy, false);
+      if (check) {
+        if (enemy.type === "Pawn") {
+          if (results.moves.includes(square)) {
+            setFigureKillsKing(enemy);
+            kingKiller = enemy;
+            can = true;
+          }
+        } else {
+          if (results.kills.includes(square)) {
+            kingKiller = enemy;
 
-      if (results.moves.includes(square)) {
-        can = true;
-        return;
+            setFigureKillsKing(enemy);
+            can = true;
+          }
+        }
+      } else {
+        if (results.moves.includes(square)) {
+          can = true;
+        }
       }
     });
     return can;
@@ -409,6 +426,8 @@ export default function Chessboard() {
           if (checkIfOccupied(letter + i)) {
             if (IsAnotherColor(letter + i, "white")) {
               kills.push(letter + i);
+            } else if (!set) {
+              moves.push(letter + i);
             }
             break;
           } else {
@@ -416,10 +435,12 @@ export default function Chessboard() {
           }
         }
         // Down
-        for (let i = number + 1; i > 0; i--) {
+        for (let i = number - 1; i > 0; i--) {
           if (checkIfOccupied(letter + i)) {
             if (IsAnotherColor(letter + i, "white")) {
               kills.push(letter + i);
+            } else if (!set) {
+              moves.push(letter + i);
             }
             break;
           } else {
@@ -431,6 +452,8 @@ export default function Chessboard() {
           if (checkIfOccupied(letters[i] + number)) {
             if (IsAnotherColor(letters[i] + number, "white")) {
               kills.push(letters[i] + number);
+            } else if (!set) {
+              moves.push(letters[i] + number);
             }
             break;
           } else {
@@ -441,6 +464,8 @@ export default function Chessboard() {
           if (checkIfOccupied(letters[i] + number)) {
             if (IsAnotherColor(letters[i] + number, "white")) {
               kills.push(letters[i] + number);
+            } else if (!set) {
+              moves.push(letters[i] + number);
             }
             break;
           } else {
@@ -455,6 +480,8 @@ export default function Chessboard() {
           if (checkIfOccupied(letter + i)) {
             if (IsAnotherColor(letter + i, "black")) {
               kills.push(letter + i);
+            } else if (!set) {
+              moves.push(letter + i);
             }
             break;
           } else {
@@ -462,10 +489,12 @@ export default function Chessboard() {
           }
         }
         // Down
-        for (let i = number + 1; i > 0; i--) {
+        for (let i = number - 1; i > 0; i--) {
           if (checkIfOccupied(letter + i)) {
             if (IsAnotherColor(letter + i, "black")) {
               kills.push(letter + i);
+            } else if (!set) {
+              moves.push(letter + i);
             }
             break;
           } else {
@@ -477,6 +506,8 @@ export default function Chessboard() {
           if (checkIfOccupied(letters[i] + number)) {
             if (IsAnotherColor(letters[i] + number, "black")) {
               kills.push(letters[i] + number);
+            } else if (!set) {
+              moves.push(letters[i] + number);
             }
             break;
           } else {
@@ -487,6 +518,8 @@ export default function Chessboard() {
           if (checkIfOccupied(letters[i] + number)) {
             if (IsAnotherColor(letters[i] + number, "black")) {
               kills.push(letters[i] + number);
+            } else if (!set) {
+              moves.push(letters[i] + number);
             }
             break;
           } else {
@@ -521,6 +554,8 @@ export default function Chessboard() {
           if (checkIfOccupied(m)) {
             if (IsAnotherColor(m, "white")) {
               kills.push(m);
+            } else if (!set) {
+              moves.push(m);
             }
           } else {
             moves.push(m);
@@ -531,6 +566,8 @@ export default function Chessboard() {
           if (checkIfOccupied(m)) {
             if (IsAnotherColor(m, "black")) {
               kills.push(m);
+            } else if (!set) {
+              moves.push(m);
             }
           } else {
             moves.push(m);
@@ -549,6 +586,8 @@ export default function Chessboard() {
             if (checkIfOccupied(m)) {
               if (IsAnotherColor(m, "white")) {
                 kills.push(m);
+              } else if (!set) {
+                moves.push(m);
               }
               break;
             } else {
@@ -564,6 +603,8 @@ export default function Chessboard() {
             if (checkIfOccupied(m)) {
               if (IsAnotherColor(m, "white")) {
                 kills.push(m);
+              } else if (!set) {
+                moves.push(m);
               }
               break;
             } else {
@@ -579,6 +620,8 @@ export default function Chessboard() {
             if (checkIfOccupied(m)) {
               if (IsAnotherColor(m, "white")) {
                 kills.push(m);
+              } else if (!set) {
+                moves.push(m);
               }
               break;
             } else {
@@ -594,6 +637,8 @@ export default function Chessboard() {
             if (checkIfOccupied(m)) {
               if (IsAnotherColor(m, "white")) {
                 kills.push(m);
+              } else if (!set) {
+                moves.push(m);
               }
               break;
             } else {
@@ -610,6 +655,8 @@ export default function Chessboard() {
             if (checkIfOccupied(m)) {
               if (IsAnotherColor(m, "black")) {
                 kills.push(m);
+              } else if (!set) {
+                moves.push(m);
               }
               break;
             } else {
@@ -625,6 +672,8 @@ export default function Chessboard() {
             if (checkIfOccupied(m)) {
               if (IsAnotherColor(m, "black")) {
                 kills.push(m);
+              } else if (!set) {
+                moves.push(m);
               }
               break;
             } else {
@@ -640,6 +689,8 @@ export default function Chessboard() {
             if (checkIfOccupied(m)) {
               if (IsAnotherColor(m, "black")) {
                 kills.push(m);
+              } else if (!set) {
+                moves.push(m);
               }
               break;
             } else {
@@ -655,6 +706,8 @@ export default function Chessboard() {
             if (checkIfOccupied(m)) {
               if (IsAnotherColor(m, "black")) {
                 kills.push(m);
+              } else if (!set) {
+                moves.push(m);
               }
               break;
             } else {
@@ -672,16 +725,37 @@ export default function Chessboard() {
       let prevLetter = letters[letters.indexOf(letter) - 1];
       let nextNumber = number + 1;
       let prevNumber = number - 1;
-      let kingMoves = [
-        nextLetter + nextNumber,
-        nextLetter + number,
-        nextLetter + prevNumber,
-        letter + nextNumber,
-        letter + prevNumber,
-        prevLetter + nextNumber,
-        prevLetter + number,
-        prevLetter + prevNumber,
-      ];
+      let kingMoves = [];
+      if (nextLetter !== undefined) {
+        if (nextNumber < 9) {
+          kingMoves.push(nextLetter + nextNumber);
+        }
+        if (number < 9) {
+          kingMoves.push(nextLetter + number);
+        }
+        if (prevNumber > 0) {
+          kingMoves.push(nextLetter + prevNumber);
+        }
+      }
+      if (letter !== undefined) {
+        if (nextNumber < 9) {
+          kingMoves.push(letter + nextNumber);
+        }
+        if (prevNumber > 0) {
+          kingMoves.push(letter + prevNumber);
+        }
+      }
+      if (prevLetter !== undefined) {
+        if (nextNumber < 9) {
+          kingMoves.push(prevLetter + nextNumber);
+        }
+        if (number < 9) {
+          kingMoves.push(prevLetter + number);
+        }
+        if (prevNumber > 0) {
+          kingMoves.push(prevLetter + prevNumber);
+        }
+      }
       if (!set) {
         moves = kingMoves;
       } else {
@@ -691,6 +765,8 @@ export default function Chessboard() {
               if (!canGetKilled(m, color)) {
                 kills.push(m);
               }
+            } else if (!set) {
+              moves.push(m);
             }
           } else {
             if (!canGetKilled(m, color)) {
@@ -706,10 +782,12 @@ export default function Chessboard() {
       let queenMoves = [];
       // Top
       for (let i = number + 1; i < 9; i++) {
-        let m = letter + i
+        let m = letter + i;
         if (checkIfOccupied(m)) {
           if (IsAnotherColor(m, color)) {
             kills.push(m);
+          } else if (!set) {
+            moves.push(m);
           }
           break;
         } else {
@@ -722,6 +800,8 @@ export default function Chessboard() {
         if (checkIfOccupied(m)) {
           if (IsAnotherColor(m, color)) {
             kills.push(m);
+          } else if (!set) {
+            moves.push(m);
           }
           break;
         } else {
@@ -734,6 +814,8 @@ export default function Chessboard() {
         if (checkIfOccupied(m)) {
           if (IsAnotherColor(m, color)) {
             kills.push(m);
+          } else if (!set) {
+            moves.push(m);
           }
           break;
         } else {
@@ -746,6 +828,8 @@ export default function Chessboard() {
         if (checkIfOccupied(m)) {
           if (IsAnotherColor(m, color)) {
             kills.push(m);
+          } else if (!set) {
+            moves.push(m);
           }
           break;
         } else {
@@ -760,6 +844,8 @@ export default function Chessboard() {
         if (checkIfOccupied(m)) {
           if (IsAnotherColor(m, color)) {
             kills.push(m);
+          } else if (!set) {
+            moves.push(m);
           }
           break;
         } else {
@@ -774,6 +860,8 @@ export default function Chessboard() {
         if (checkIfOccupied(m)) {
           if (IsAnotherColor(m, color)) {
             kills.push(m);
+          } else if (!set) {
+            moves.push(m);
           }
           break;
         } else {
@@ -788,6 +876,8 @@ export default function Chessboard() {
         if (checkIfOccupied(m)) {
           if (IsAnotherColor(m, color)) {
             kills.push(m);
+          } else if (!set) {
+            moves.push(m);
           }
           break;
         } else {
@@ -798,10 +888,12 @@ export default function Chessboard() {
       // left & Bottom
       x = 1;
       for (let i = letters.indexOf(letter) - 1; i > -1; i--) {
-        let m = letters[i] + (number - x)
+        let m = letters[i] + (number - x);
         if (checkIfOccupied(m)) {
           if (IsAnotherColor(m, color)) {
             kills.push(m);
+          } else if (!set) {
+            moves.push(m);
           }
           break;
         } else {
@@ -824,6 +916,9 @@ export default function Chessboard() {
       figures[figures.indexOf(figureIsSelected)].square = square;
       figures[figures.indexOf(figureIsSelected)].isMoved = true;
       figures[figures.indexOf(figureIsSelected)].isSelected = false;
+      if (isCheck()) {
+        checkLose();
+      }
 
       setFigures(figures);
       setFigureIsSelected(null);
@@ -844,6 +939,9 @@ export default function Chessboard() {
       figures[figures.indexOf(figureIsSelected)].square = square;
       figures[figures.indexOf(figureIsSelected)].isMoved = true;
       figures[figures.indexOf(figureIsSelected)].isSelected = false;
+      if (isCheck()) {
+        checkLose();
+      }
 
       setFigures(figures);
       setFigureIsSelected(null);
@@ -852,6 +950,54 @@ export default function Chessboard() {
       selectFigure();
       changeTurn();
     }
+  }
+  function checkLose() {
+    let lose = true;
+
+    if (turn === "white") {
+      // Checking if king can move or kill somewhere safely
+      let king = figures.find((fig) => {
+        return fig.type === "King" && fig.color === "black";
+      });
+      let movesAndKills = calculateGoingAndKilling(king, true);
+      if (movesAndKills.moves.length > 0 || movesAndKills.kills.length > 0) {
+        lose = false;
+      }
+      // Checking if anyone can kill attacker figure
+      if(canGetKilled(kingKiller.square, kingKiller.color)){
+        lose=false;
+      };
+    } else {
+      // Checking if king can move or kill somewhere safely
+      let king = figures.find((fig) => {
+        return fig.type === "King" && fig.color === "white";
+      });
+      let movesAndKills = calculateGoingAndKilling(king, true);
+      if (movesAndKills.moves.length > 0 || movesAndKills.kills.length > 0) {
+        lose = false;
+      }
+      // Checking if anyone can kill attacker figure
+      if(canGetKilled(kingKiller.square, kingKiller.color)){
+        lose=false;
+      };
+    }
+    console.log(lose);
+  }
+  function isCheck() {
+    let x = false;
+    if (turn === "white") {
+      let King = figures.find(
+        (fig) => fig.color === "black" && fig.type === "King"
+      );
+      x = canGetKilled(King.square, King.color, true);
+    }
+    if (turn === "black") {
+      let King = figures.find(
+        (fig) => fig.color === "white" && fig.type === "King"
+      );
+      x = canGetKilled(King.square, King.color, true);
+    }
+    return x;
   }
   useEffect(() => {
     if (figureIsSelected !== null) {
