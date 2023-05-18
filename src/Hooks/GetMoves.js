@@ -7,103 +7,153 @@ import GoDownRight from "./GoDownRight";
 import GoLeft from "./GoLeft";
 import GoRight from "./GoRight";
 import LShapeMoves from "./LShapeMoves";
-export default function GetMoves(figure) {
+import Coords from "./Coords";
+export default function GetMoves(figure, figures) {
   const { type, color, row, column, isMoved } = figure;
   const allMoves = [];
   const allKills = [];
-  
-  
+  const allDefending = [];
   // for White Pawn
   if (type === "Pawn" && color === "white") {
     if (isMoved) {
-      allMoves.push(...GoFront(row, column, 1));
+      let front = GoFront(row, column, 1, figures, figure);
+      allMoves.push(...front.moves);
     } else {
-      allMoves.push(...GoFront(row, column, 2));
+      let front = GoFront(row, column, 2, figures, figure);
+      allMoves.push(...front.moves);
     }
-
-    allKills.push(...GoFrontRight(row, column, 1));
-    allKills.push(...GoFrontLeft(row, column, 1));
+    let frontRight = GoFrontRight(row, column, 1, figures, figure);
+    let frontLeft = GoFrontLeft(row, column, 1, figures, figure);
+    if (row + 1 < 9 && column + 1 < 9) {
+      allDefending.push(Coords(row + 1, column + 1));
+    }
+    if (row - 1 > 0 && column + 1 < 9) {
+      allDefending.push(Coords(row - 1, column + 1));
+    }
+    allKills.push(...frontLeft.kills, ...frontRight.kills);
   }
   // for Blacke Pawn
   if (type === "Pawn" && color === "black") {
     if (isMoved) {
-      allMoves.push(...GoDown(row, column, 1));
+      let down = GoDown(row, column, 1, figures, figure);
+      allMoves.push(...down.moves);
     } else {
-      allMoves.push(...GoDown(row, column, 2));
+      let down = GoDown(row, column, 2, figures, figure);
+      allMoves.push(...down.moves);
     }
-    allKills.push(...GoDownLeft(row, column, 1));
-    allKills.push(...GoDownRight(row, column, 1));
+    let downRight = GoDownRight(row, column, 1, figures, figure);
+    let downLeft = GoDownLeft(row, column, 1, figures, figure);
+    if (row - 1 > 0 && column - 1 > 0) {
+      allDefending.push(Coords(row - 1, column - 1));
+    }
+    if (row + 1 < 9 && column - 1 < 9) {
+      allDefending.push(Coords(row - 1, column - 1));
+    }
+    allKills.push(...downLeft.kills, ...downRight.kills);
   }
   // for Rook
   if (type === "Rook") {
-    allMoves.push(...GoFront(row, column, 8));
-    allMoves.push(...GoDown(row, column, 8));
-    allMoves.push(...GoLeft(row, column, 8));
-    allMoves.push(...GoRight(row, column, 8));
-
-    allKills.push(...GoFront(row, column, 8));
-    allKills.push(...GoDown(row, column, 8));
-    allKills.push(...GoLeft(row, column, 8));
-    allKills.push(...GoRight(row, column, 8));
+    let front = GoFront(row, column, 8, figures, figure);
+    let down = GoDown(row, column, 8, figures, figure);
+    let right = GoRight(row, column, 8, figures, figure);
+    let left = GoLeft(row, column, 8, figures, figure);
+    allMoves.push(...front.moves, ...down.moves, ...left.moves, ...right.moves);
+    allKills.push(...front.kills, ...down.kills, ...left.kills, ...right.kills);
+    allDefending.push(
+      ...front.defending,
+      ...down.defending,
+      ...left.defending,
+      ...right.defending
+    );
   }
-  // for Knight
+  //  for Knight
   if (type === "Knight") {
-    allMoves.push(...LShapeMoves(row, column));
-    allKills.push(...LShapeMoves(row, column));
+    let moves = LShapeMoves(row, column, figures, figure);
+    allMoves.push(...moves.moves);
+    allKills.push(...moves.kills);
+    allDefending.push(...moves.defending);
   }
   // for Bishop
   if (type === "Bishop") {
-    allMoves.push(...GoFrontRight(row, column, 8));
-    allMoves.push(...GoFrontLeft(row, column, 8));
-    allMoves.push(...GoDownRight(row, column, 8));
-    allMoves.push(...GoDownLeft(row, column, 8));
-
-    allKills.push(...GoFrontRight(row, column, 8));
-    allKills.push(...GoFrontLeft(row, column, 8));
-    allKills.push(...GoDownRight(row, column, 8));
-    allKills.push(...GoDownLeft(row, column, 8));
+    let frontRight = GoFrontRight(row, column, 8, figures, figure);
+    let downRight = GoDownRight(row, column, 8, figures, figure);
+    let frontLeft = GoFrontLeft(row, column, 8, figures, figure);
+    let downLeft = GoDownLeft(row, column, 8, figures, figure);
+    allMoves.push(
+      ...frontRight.moves,
+      ...downRight.moves,
+      ...frontLeft.moves,
+      ...downLeft.moves
+    );
+    allKills.push(
+      ...frontRight.kills,
+      ...downRight.kills,
+      ...frontLeft.kills,
+      ...downLeft.kills
+    );
+    allDefending.push(
+      ...frontRight.defending,
+      ...downRight.defending,
+      ...frontLeft.defending,
+      ...downLeft.defending
+    );
   }
   // for Queen
   if (type === "Queen") {
-    allMoves.push(...GoFrontRight(row, column, 8));
-    allMoves.push(...GoFrontLeft(row, column, 8));
-    allMoves.push(...GoDownRight(row, column, 8));
-    allMoves.push(...GoDownLeft(row, column, 8));
-
-    allKills.push(...GoFrontRight(row, column, 8));
-    allKills.push(...GoFrontLeft(row, column, 8));
-    allKills.push(...GoDownRight(row, column, 8));
-    allKills.push(...GoDownLeft(row, column, 8));
-
-    allMoves.push(...GoFront(row, column, 8));
-    allMoves.push(...GoDown(row, column, 8));
-    allMoves.push(...GoLeft(row, column, 8));
-    allMoves.push(...GoRight(row, column, 8));
-
-    allKills.push(...GoFront(row, column, 8));
-    allKills.push(...GoDown(row, column, 8));
-    allKills.push(...GoLeft(row, column, 8));
-    allKills.push(...GoRight(row, column, 8));
+    let front = GoFront(row, column, 8, figures, figure);
+    let down = GoDown(row, column, 8, figures, figure);
+    let right = GoRight(row, column, 8, figures, figure);
+    let left = GoLeft(row, column, 8, figures, figure);
+    allMoves.push(...front.moves, ...down.moves, ...left.moves, ...right.moves);
+    allKills.push(...front.kills, ...down.kills, ...left.kills, ...right.kills);
+    allDefending.push(
+      ...front.defending,
+      ...down.defending,
+      ...left.defending,
+      ...right.defending
+    );
+    let frontRight = GoFrontRight(row, column, 8, figures, figure);
+    let downRight = GoDownRight(row, column, 8, figures, figure);
+    let frontLeft = GoFrontLeft(row, column, 8, figures, figure);
+    let downLeft = GoDownLeft(row, column, 8, figures, figure);
+    allMoves.push(
+      ...frontRight.moves,
+      ...downRight.moves,
+      ...frontLeft.moves,
+      ...downLeft.moves
+    );
+    allKills.push(
+      ...frontRight.kills,
+      ...downRight.kills,
+      ...frontLeft.kills,
+      ...downLeft.kills
+    );
+    allDefending.push(
+      ...frontRight.defending,
+      ...downRight.defending,
+      ...frontLeft.defending,
+      ...downLeft.defending
+    );
   }
   // for king
-  if (type === "King") {
-    allMoves.push(...GoFrontRight(row, column, 1));
-    allMoves.push(...GoFrontLeft(row, column, 1));
-    allMoves.push(...GoDownRight(row, column, 1));
-    allMoves.push(...GoDownLeft(row, column, 1));
-    allMoves.push(...GoFront(row, column, 1));
-    allMoves.push(...GoDown(row, column, 1));
-    allMoves.push(...GoLeft(row, column, 1));
-    allMoves.push(...GoRight(row, column, 1));
-    allKills.push(...GoFrontRight(row, column, 1));
-    allKills.push(...GoFrontLeft(row, column, 1));
-    allKills.push(...GoDownRight(row, column, 1));
-    allKills.push(...GoDownLeft(row, column, 1));
-    allKills.push(...GoFront(row, column, 1));
-    allKills.push(...GoDown(row, column, 1));
-    allKills.push(...GoLeft(row, column, 1));
-    allKills.push(...GoRight(row, column, 1));
-  }
+  // if (type === "King") {
+  //   allMoves.push(...GoFrontRight(row, column, 1));
+  //   allMoves.push(...GoFrontLeft(row, column, 1));
+  //   allMoves.push(...GoDownRight(row, column, 1));
+  //   allMoves.push(...GoDownLeft(row, column, 1));
+  //   allMoves.push(...GoFront(row, column, 1));
+  //   allMoves.push(...GoDown(row, column, 1));
+  //   allMoves.push(...GoLeft(row, column, 1));
+  //   allMoves.push(...GoRight(row, column, 1));
+  //   allKills.push(...GoFrontRight(row, column, 1));
+  //   allKills.push(...GoFrontLeft(row, column, 1));
+  //   allKills.push(...GoDownRight(row, column, 1));
+  //   allKills.push(...GoDownLeft(row, column, 1));
+  //   allKills.push(...GoFront(row, column, 1));
+  //   allKills.push(...GoDown(row, column, 1));
+  //   allKills.push(...GoLeft(row, column, 1));
+  //   allKills.push(...GoRight(row, column, 1));
+  // }
 
-  return { allMoves, allKills };
+  return { allMoves, allKills, allDefending };
 }

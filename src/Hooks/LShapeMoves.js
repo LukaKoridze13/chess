@@ -1,7 +1,15 @@
 import Coords from "./Coords";
+import Occupied from "./Ocuppied";
 
-export default function LShapeMoves(startingRow, startingColumn) {
+export default function LShapeMoves(
+  startingRow,
+  startingColumn,
+  figures,
+  figure
+) {
   let moves = [];
+  let kills = [];
+  let defending = [];
 
   let nextRow = startingRow + 1;
   let nextSecondRow = startingRow + 2;
@@ -14,36 +22,108 @@ export default function LShapeMoves(startingRow, startingColumn) {
 
   if (nextRow < 9) {
     if (nextSecondColumn < 9) {
-      moves.push(Coords(nextRow, nextSecondColumn));
+      let ocuppied = Occupied(nextRow, nextSecondColumn, figures);
+      let move = Coords(nextRow, nextSecondColumn);
+      if (ocuppied) {
+        if (ocuppied !== figure.color) {
+          kills.push(move);
+        }
+      } else {
+        moves.push(move);
+      }
+      defending.push(move);
     }
     if (prevSecondColumn > 0) {
-      moves.push(Coords(nextRow, prevSecondColumn));
+      let ocuppied = Occupied(nextRow, prevSecondColumn, figures);
+      let move = Coords(nextRow, prevSecondColumn);
+      if (ocuppied) {
+        if (ocuppied !== figure.color) {
+          kills.push(move);
+        }
+      } else {
+        moves.push(move);
+      }
+      defending.push(move);
     }
   }
   if (nextSecondRow < 9) {
     if (nextColumn < 9) {
-      moves.push(Coords(nextSecondRow, nextColumn));
+      let ocuppied = Occupied(nextSecondRow, nextColumn, figures);
+      let move = Coords(nextSecondRow, nextColumn);
+      if (ocuppied) {
+        if (ocuppied !== figure.color) {
+          kills.push(move);
+        }
+      } else {
+        moves.push(move);
+      }
+      defending.push(move);
     }
     if (prevColumn > 0) {
-      moves.push(Coords(nextSecondRow, prevColumn));
+      let ocuppied = Occupied(nextSecondRow, prevColumn, figures);
+      let move = Coords(nextSecondRow, prevColumn);
+      if (ocuppied) {
+        if (ocuppied !== figure.color) {
+          kills.push(move);
+        }
+      } else {
+        moves.push(move);
+      }
+      defending.push(move);
     }
   }
   if (prevRow > 0) {
     if (prevSecondColumn > 0) {
-      moves.push(Coords(prevRow, prevSecondColumn));
+      let ocuppied = Occupied(prevRow, prevSecondColumn, figures);
+      let move = Coords(prevRow, prevSecondColumn);
+      if (ocuppied) {
+        if (ocuppied !== figure.color) {
+          kills.push(move);
+        }
+      } else {
+        moves.push(move);
+      }
+      defending.push(move);
     }
     if (nextSecondColumn < 9) {
-      moves.push(Coords(prevRow, nextSecondColumn));
+      let ocuppied = Occupied(prevRow, nextSecondColumn, figures);
+      let move = Coords(prevRow, nextSecondColumn);
+      if (ocuppied) {
+        if (ocuppied !== figure.color) {
+          kills.push(move);
+        }
+      } else {
+        moves.push(move);
+      }
+      defending.push(move);
     }
   }
   if (prevSecondRow > 0) {
     if (prevColumn > 0) {
-      moves.push(Coords(prevSecondRow, prevColumn));
+      let ocuppied = Occupied(prevSecondRow, prevColumn, figures);
+      let move = Coords(prevSecondRow, prevColumn);
+      if (ocuppied) {
+        if (ocuppied !== figure.color) {
+          kills.push(move);
+        }
+      } else {
+        moves.push(move);
+      }
+      defending.push(move);
     }
     if (nextColumn < 9) {
-      moves.push(Coords(prevSecondRow, nextColumn));
+      let ocuppied = Occupied(prevSecondRow, nextColumn, figures);
+      let move = Coords(prevSecondRow, nextColumn);
+      if (ocuppied) {
+        if (ocuppied !== figure.color) {
+          kills.push(move);
+        }
+      } else {
+        moves.push(move);
+      }
+      defending.push(move);
     }
   }
 
-  return moves;
+  return { moves, kills, defending };
 }

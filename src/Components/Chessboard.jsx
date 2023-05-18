@@ -15,8 +15,99 @@ export default function Chessboard() {
     {
       type: "Pawn",
       color: "white",
+      row: 1,
+      column: 2,
+      isSelected: false,
+      isDead: false,
+      isMoved: false,
+    },
+    {
+      type: "Pawn",
+      color: "white",
+      row: 2,
+      column: 2,
+      isSelected: false,
+      isDead: false,
+      isMoved: false,
+    },
+    {
+      type: "Pawn",
+      color: "white",
+      row: 3,
+      column: 2,
+      isSelected: false,
+      isDead: false,
+      isMoved: false,
+    },
+    {
+      type: "Pawn",
+      color: "white",
       row: 4,
       column: 2,
+      isSelected: false,
+      isDead: false,
+      isMoved: false,
+    },
+    {
+      type: "Pawn",
+      color: "white",
+      row: 5,
+      column: 2,
+      isSelected: false,
+      isDead: false,
+      isMoved: false,
+    },
+    {
+      type: "Pawn",
+      color: "white",
+      row: 6,
+      column: 2,
+      isSelected: false,
+      isDead: false,
+      isMoved: false,
+    },
+    {
+      type: "Pawn",
+      color: "white",
+      row: 7,
+      column: 2,
+      isSelected: false,
+      isDead: false,
+      isMoved: false,
+    },
+    {
+      type: "Pawn",
+      color: "white",
+      row: 8,
+      column: 2,
+      isSelected: false,
+      isDead: false,
+      isMoved: false,
+    },
+    // -----------
+    {
+      type: "Pawn",
+      color: "black",
+      row: 1,
+      column: 7,
+      isSelected: false,
+      isDead: false,
+      isMoved: false,
+    },
+    {
+      type: "Pawn",
+      color: "black",
+      row: 2,
+      column: 7,
+      isSelected: false,
+      isDead: false,
+      isMoved: false,
+    },
+    {
+      type: "Pawn",
+      color: "black",
+      row: 3,
+      column: 7,
       isSelected: false,
       isDead: false,
       isMoved: false,
@@ -31,10 +122,93 @@ export default function Chessboard() {
       isMoved: false,
     },
     {
-      type: "King",
-      color: "white",
+      type: "Pawn",
+      color: "black",
       row: 5,
-      column: 4,
+      column: 7,
+      isSelected: false,
+      isDead: false,
+      isMoved: false,
+    },
+    {
+      type: "Pawn",
+      color: "black",
+      row: 6,
+      column: 7,
+      isSelected: false,
+      isDead: false,
+      isMoved: false,
+    },
+    {
+      type: "Pawn",
+      color: "black",
+      row: 7,
+      column: 7,
+      isSelected: false,
+      isDead: false,
+      isMoved: false,
+    },
+    {
+      type: "Pawn",
+      color: "black",
+      row: 8,
+      column: 7,
+      isSelected: false,
+      isDead: false,
+      isMoved: false,
+    },
+    // ------------
+    {
+      type: "Rook",
+      color: "white",
+      row: 1,
+      column: 1,
+      isSelected: false,
+      isDead: false,
+      isMoved: false,
+    },
+    {
+      type: "Rook",
+      color: "white",
+      row: 8,
+      column: 1,
+      isSelected: false,
+      isDead: false,
+      isMoved: false,
+    },
+    {
+      type: "Rook",
+      color: "black",
+      row: 1,
+      column: 8,
+      isSelected: false,
+      isDead: false,
+      isMoved: false,
+    },
+    {
+      type: "Rook",
+      color: "black",
+      row: 8,
+      column: 8,
+      isSelected: false,
+      isDead: false,
+      isMoved: false,
+    },
+    // -----
+    {
+      type: "Knight",
+      color: "white",
+      row: 2,
+      column: 1,
+      isSelected: false,
+      isDead: false,
+      isMoved: false,
+    },
+    {
+      type: "Knight",
+      color: "white",
+      row: 7,
+      column: 1,
       isSelected: false,
       isDead: false,
       isMoved: false,
@@ -42,8 +216,92 @@ export default function Chessboard() {
     {
       type: "Knight",
       color: "black",
+      row: 2,
+      column: 8,
+      isSelected: false,
+      isDead: false,
+      isMoved: false,
+    },
+    {
+      type: "Knight",
+      color: "black",
+      row: 7,
+      column: 8,
+      isSelected: false,
+      isDead: false,
+      isMoved: false,
+    },
+    // ----
+    {
+      type: "Bishop",
+      color: "white",
+      row: 3,
+      column: 1,
+      isSelected: false,
+      isDead: false,
+      isMoved: false,
+    },
+    {
+      type: "Bishop",
+      color: "white",
+      row: 6,
+      column: 1,
+      isSelected: false,
+      isDead: false,
+      isMoved: false,
+    },
+    {
+      type: "Bishop",
+      color: "black",
+      row: 3,
+      column: 8,
+      isSelected: false,
+      isDead: false,
+      isMoved: false,
+    },
+    {
+      type: "Bishop",
+      color: "black",
+      row: 6,
+      column: 8,
+      isSelected: false,
+      isDead: false,
+      isMoved: false,
+    },
+    // -----
+    {
+      type: "Queen",
+      color: "white",
+      row: 4,
+      column: 1,
+      isSelected: false,
+      isDead: false,
+      isMoved: false,
+    },
+    {
+      type: "Queen",
+      color: "black",
+      row: 4,
+      column: 8,
+      isSelected: false,
+      isDead: false,
+      isMoved: false,
+    },
+    // ----
+    {
+      type: "King",
+      color: "white",
       row: 5,
-      column: 7,
+      column: 1,
+      isSelected: false,
+      isDead: false,
+      isMoved: false,
+    },
+    {
+      type: "King",
+      color: "black",
+      row: 5,
+      column: 8,
       isSelected: false,
       isDead: false,
       isMoved: false,
@@ -54,6 +312,9 @@ export default function Chessboard() {
     let figureClicked = figures.find(
       (figure) => Coords(figure.row, figure.column) === coords
     );
+    figures.forEach((figure) => {
+      figure.isSelected = false;
+    });
     figureClicked.isSelected = true;
     setfigureIsSelected(figureClicked);
     setFigures([...figures]);
@@ -805,12 +1066,10 @@ export default function Chessboard() {
 
   useEffect(() => {
     if (figureIsSelected) {
-      // Calculate all moves and kill
-        // Get All moves
-        let moves = GetMoves(figureIsSelected)
-        setAvailableMoves(moves.allMoves)
-        setAvailableKills(moves.allKills);
-        console.log(moves)
+      let moves = GetMoves(figureIsSelected, figures);
+      setAvailableMoves(moves.allMoves);
+      setAvailableKills(moves.allKills);
+      console.log(moves);
     }
   }, [figureIsSelected]);
 
