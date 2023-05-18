@@ -7,12 +7,18 @@ export default function DrawSquares(
   figures,
   moves,
   kills,
-  selectFigureToMove
+  selectFigureToMove,
+  move,
+  turnColor,
 ) {
   const squares = [];
   for (let row = 1; row < 9; row++) {
     for (let column = 1; column < 9; column++) {
       const COORDS = Coords(row, column);
+      const moveHere = () => {
+        move(row, column);
+      };
+
       const FIGURE = figures.find((figure) => {
         const { type, color, row, column, isDead, isSelected } = figure;
         return COORDS === Coords(row, column) && !isDead;
@@ -35,13 +41,18 @@ export default function DrawSquares(
       squares.push(
         <Square color={squareColor} key={COORDS}>
           {/* If Player Can Go On This Square, it will be green, otherwise it will be red  */}
-          {moves.includes(COORDS) && <ColoredSquare type="move" />}
-          {kills.includes(COORDS) && <ColoredSquare type="kill" />}
+          {moves.includes(COORDS) && (
+            <ColoredSquare type="move" onClick={moveHere} />
+          )}
+          {kills.includes(COORDS) && (
+            <ColoredSquare type="kill" onClick={moveHere} />
+          )}
           {FIGURE && (
             <Figure
               type={FIGURE.type}
               isSelected={FIGURE.isSelected}
               color={FIGURE.color}
+              turnColor={turnColor}
               myColor={myColor}
               onClick={() => {
                 selectFigureToMove(COORDS);

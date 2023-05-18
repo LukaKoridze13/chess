@@ -7,7 +7,7 @@ import { faChessPawn } from "@fortawesome/free-solid-svg-icons";
 import { faChessQueen } from "@fortawesome/free-solid-svg-icons";
 import { faChessRook } from "@fortawesome/free-solid-svg-icons";
 
-export default function Pawn(props) {
+export default function Figure(props) {
   let black = "#1f2a3d";
   let white = "#e6e5e9";
   let figure;
@@ -43,7 +43,7 @@ export default function Pawn(props) {
         color: props.color === "white" ? white : black,
         position: "relative",
         zIndex: 5,
-        pointerEvents: props.color !== props.myColor && "none",
+        pointerEvents: props.color !== props.turnColor && "none",
       }}
       onClick={props.onClick}
     />

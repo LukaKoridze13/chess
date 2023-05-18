@@ -136,24 +136,42 @@ export default function GetMoves(figure, figures) {
     );
   }
   // for king
-  // if (type === "King") {
-  //   allMoves.push(...GoFrontRight(row, column, 1));
-  //   allMoves.push(...GoFrontLeft(row, column, 1));
-  //   allMoves.push(...GoDownRight(row, column, 1));
-  //   allMoves.push(...GoDownLeft(row, column, 1));
-  //   allMoves.push(...GoFront(row, column, 1));
-  //   allMoves.push(...GoDown(row, column, 1));
-  //   allMoves.push(...GoLeft(row, column, 1));
-  //   allMoves.push(...GoRight(row, column, 1));
-  //   allKills.push(...GoFrontRight(row, column, 1));
-  //   allKills.push(...GoFrontLeft(row, column, 1));
-  //   allKills.push(...GoDownRight(row, column, 1));
-  //   allKills.push(...GoDownLeft(row, column, 1));
-  //   allKills.push(...GoFront(row, column, 1));
-  //   allKills.push(...GoDown(row, column, 1));
-  //   allKills.push(...GoLeft(row, column, 1));
-  //   allKills.push(...GoRight(row, column, 1));
-  // }
+  if (type === "King") {
+    let front = GoFront(row, column, 1, figures, figure);
+    let down = GoDown(row, column, 1, figures, figure);
+    let right = GoRight(row, column, 1, figures, figure);
+    let left = GoLeft(row, column, 1, figures, figure);
+    let frontRight = GoFrontRight(row, column, 1, figures, figure);
+    let downRight = GoDownRight(row, column, 1, figures, figure);
+    let frontLeft = GoFrontLeft(row, column, 1, figures, figure);
+    let downLeft = GoDownLeft(row, column, 1, figures, figure);
+    allMoves.push(...front.moves, ...down.moves, ...left.moves, ...right.moves);
+    allKills.push(...front.kills, ...down.kills, ...left.kills, ...right.kills);
+    allDefending.push(
+      ...front.defending,
+      ...down.defending,
+      ...left.defending,
+      ...right.defending
+    );
+    allMoves.push(
+      ...frontRight.moves,
+      ...downRight.moves,
+      ...frontLeft.moves,
+      ...downLeft.moves
+    );
+    allKills.push(
+      ...frontRight.kills,
+      ...downRight.kills,
+      ...frontLeft.kills,
+      ...downLeft.kills
+    );
+    allDefending.push(
+      ...frontRight.defending,
+      ...downRight.defending,
+      ...frontLeft.defending,
+      ...downLeft.defending
+    );
+  }
 
   return { allMoves, allKills, allDefending };
 }
