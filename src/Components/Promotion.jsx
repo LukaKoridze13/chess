@@ -19,12 +19,18 @@ export default function Promotion(props) {
           color: color === "white" ? white : black,
           cursor: "pointer",
         }}
+        onClick={() => {
+          props.promote("Queen");
+        }}
       />
       <FontAwesomeIcon
         icon={faChessRook}
         style={{
           color: color === "white" ? white : black,
           cursor: "pointer",
+        }}
+        onClick={() => {
+          props.promote("Rook");
         }}
       />
       <FontAwesomeIcon
@@ -33,12 +39,18 @@ export default function Promotion(props) {
           color: color === "white" ? white : black,
           cursor: "pointer",
         }}
+        onClick={() => {
+          props.promote("Knight");
+        }}
       />
       <FontAwesomeIcon
         icon={faChessBishop}
         style={{
           color: color === "white" ? white : black,
           cursor: "pointer",
+        }}
+        onClick={() => {
+          props.promote("Bishop");
         }}
       />
     </Popup>

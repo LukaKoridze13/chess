@@ -342,7 +342,7 @@ export default function Chessboard() {
       }
     }
     if ((column === 8 || column === 1) && figureIsSelected.type === "Pawn") {
-      setPromotion(figureIsSelected.color);
+      setPromotion(figureIsSelected);
     }
     figureIsSelected.row = row;
     figureIsSelected.column = column;
@@ -367,6 +367,16 @@ export default function Chessboard() {
     });
   }
 
+
+  function promote(figure){
+    let newFigure = promotion;
+    newFigure.type = figure
+    figures.splice(figures.indexOf(promotion), 1);
+    figures.push(newFigure)
+    setFigures([...figures])
+    setPromotion(false)
+  }
+
   useEffect(() => {
     if (figureIsSelected) {
       let moves = GetMoves(figureIsSelected, figures);
@@ -375,9 +385,9 @@ export default function Chessboard() {
       setCastling(moves.castling);
     }
   }, [figureIsSelected]);
-  // useEffect(() => {
-  //   console.log(figures);
-  // }, [turnColor]);
+  useEffect(() => {
+    console.log(figures);
+  }, [turnColor]);
 
   return (
     <>
@@ -392,7 +402,7 @@ export default function Chessboard() {
           turnColor
         )}
       </Board>
-      {promotion && <Promotion color={promotion} />}
+      {promotion && <Promotion color={promotion.color} promote={promote}/>}
     </>
   );
 }
