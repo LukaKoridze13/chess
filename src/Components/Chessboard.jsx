@@ -18,7 +18,7 @@ export default function Chessboard() {
       type: "Pawn",
       color: "white",
       row: 1,
-      column: 7,
+      column: 2,
       isSelected: false,
       isDead: false,
       isMoved: false,
@@ -87,15 +87,15 @@ export default function Chessboard() {
       isMoved: false,
     },
     // -----------
-    // {
-    //   type: "Pawn",
-    //   color: "black",
-    //   row: 1,
-    //   column: 7,
-    //   isSelected: false,
-    //   isDead: false,
-    //   isMoved: false,
-    // },
+    {
+      type: "Pawn",
+      color: "black",
+      row: 1,
+      column: 7,
+      isSelected: false,
+      isDead: false,
+      isMoved: false,
+    },
     {
       type: "Pawn",
       color: "black",
@@ -178,15 +178,15 @@ export default function Chessboard() {
       isDead: false,
       isMoved: false,
     },
-    // {
-    //   type: "Rook",
-    //   color: "black",
-    //   row: 1,
-    //   column: 8,
-    //   isSelected: false,
-    //   isDead: false,
-    //   isMoved: false,
-    // },
+    {
+      type: "Rook",
+      color: "black",
+      row: 1,
+      column: 8,
+      isSelected: false,
+      isDead: false,
+      isMoved: false,
+    },
     {
       type: "Rook",
       color: "black",
@@ -319,7 +319,6 @@ export default function Chessboard() {
     setfigureIsSelected(figureClicked);
     setFigures([...figures]);
   }
-
   function move(row, column) {
     let figureIsKilled = figures.find(
       (figure) => figure.row === row && figure.column === column
@@ -350,7 +349,6 @@ export default function Chessboard() {
     setFigures([...figures]);
     changeTurn();
   }
-
   function changeTurn() {
     turnColor === "white" ? setTurnColor("black") : setTurnColor("white");
     // myColor === "white" ? setMyColor("black") : setMyColor("white");
@@ -360,26 +358,44 @@ export default function Chessboard() {
     setCastling([]);
     setfigureIsSelected(false);
   }
-
   function unselectAll() {
     figures.forEach((figure) => {
       figure.isSelected = false;
     });
   }
-
-
-  function promote(figure){
+  function promote(figure) {
     let newFigure = promotion;
-    newFigure.type = figure
+    newFigure.type = figure;
     figures.splice(figures.indexOf(promotion), 1);
-    figures.push(newFigure)
-    setFigures([...figures])
-    setPromotion(false)
+    figures.push(newFigure);
+    setFigures([...figures]);
+    setPromotion(false);
   }
-
+  function isSafe(coords, color) {
+    let enemies = figures.filter((figure) => figure.color !== color);
+    let defendings = [];
+    enemies.forEach((enemy) => {
+      defendings.push(...GetMoves(enemy, figures).allDefending);
+    });
+    if (defendings.includes(coords)) {
+      console.log("Not Safe");
+      return false;
+    } else {
+      console.log("Safe");
+      return true;
+    }
+  }
   useEffect(() => {
     if (figureIsSelected) {
       let moves = GetMoves(figureIsSelected, figures);
+      if (figureIsSelected.type === "King") {
+        moves.allMoves = moves.allMoves.filter((move) =>
+          isSafe(move, figureIsSelected.color)
+        );
+        moves.allKills = moves.allKills.filter((move) =>
+          isSafe(move, figureIsSelected.color)
+        );
+      }
       setAvailableMoves(moves.allMoves);
       setAvailableKills(moves.allKills);
       setCastling(moves.castling);
@@ -402,7 +418,7 @@ export default function Chessboard() {
           turnColor
         )}
       </Board>
-      {promotion && <Promotion color={promotion.color} promote={promote}/>}
+      {promotion && <Promotion color={promotion.color} promote={promote} />}
     </>
   );
 }
