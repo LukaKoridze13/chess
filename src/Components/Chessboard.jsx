@@ -5,6 +5,7 @@ import Coords from "../Hooks/Coords";
 import GetMoves from "../Hooks/GetMoves";
 import ReverseCoords from "../Hooks/ReverseCoords";
 import Promotion from "./Promotion";
+import SimulateMove from "../Hooks/SimulateMove";
 export default function Chessboard() {
   const [myColor, setMyColor] = useState("white");
   const [turnColor, setTurnColor] = useState("white");
@@ -54,7 +55,7 @@ export default function Chessboard() {
       type: "Pawn",
       color: "white",
       row: 5,
-      column: 2,
+      column: 3,
       isSelected: false,
       isDead: false,
       isMoved: false,
@@ -118,7 +119,7 @@ export default function Chessboard() {
       type: "Pawn",
       color: "black",
       row: 4,
-      column: 7,
+      column: 6,
       isSelected: false,
       isDead: false,
       isMoved: false,
@@ -255,8 +256,8 @@ export default function Chessboard() {
     {
       type: "Bishop",
       color: "black",
-      row: 3,
-      column: 8,
+      row: 7,
+      column: 4,
       isSelected: false,
       isDead: false,
       isMoved: false,
@@ -294,7 +295,7 @@ export default function Chessboard() {
       type: "King",
       color: "white",
       row: 5,
-      column: 1,
+      column: 2,
       isSelected: false,
       isDead: false,
       isMoved: false,
@@ -309,7 +310,6 @@ export default function Chessboard() {
       isMoved: false,
     },
   ]);
-
   function selectFigureToMove(coords) {
     let figureClicked = figures.find(
       (figure) => Coords(figure.row, figure.column) === coords
@@ -383,6 +383,18 @@ export default function Chessboard() {
       return true;
     }
   }
+  function isCheck() {
+    let checking;
+    if (turnColor === "black") {
+      checking = "black";
+    } else {
+      checking = "white";
+    }
+    let king = figures.find(
+      (figure) => figure.color === checking && figure.type === "King"
+    );
+    return !isSafe(Coords(king.row, king.column), king.color);
+  }
   useEffect(() => {
     if (figureIsSelected) {
       let moves = GetMoves(figureIsSelected, figures);
@@ -408,7 +420,11 @@ export default function Chessboard() {
           }
         });
       }
-
+      if (isCheck()) {
+        moves.allMoves = moves.allMoves.filter((move) => {
+          return SimulateMove(figures, figureIsSelected, move);
+        });
+      }
       setAvailableMoves(moves.allMoves);
       setAvailableKills(moves.allKills);
       setCastling(moves.castling);
