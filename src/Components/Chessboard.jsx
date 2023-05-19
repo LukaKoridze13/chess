@@ -339,6 +339,7 @@ export default function Chessboard() {
       } else {
         figures[figures.indexOf(castlingDone.rook)].row = row - 1;
       }
+      setCastling([]);
     }
     if ((column === 8 || column === 1) && figureIsSelected.type === "Pawn") {
       setPromotion(figureIsSelected);
@@ -355,7 +356,6 @@ export default function Chessboard() {
     unselectAll();
     setAvailableKills([]);
     setAvailableMoves([]);
-    setCastling([]);
     setfigureIsSelected(false);
   }
   function unselectAll() {
@@ -378,10 +378,8 @@ export default function Chessboard() {
       defendings.push(...GetMoves(enemy, figures).allDefending);
     });
     if (defendings.includes(coords)) {
-      console.log("Not Safe");
       return false;
     } else {
-      console.log("Safe");
       return true;
     }
   }
@@ -395,15 +393,27 @@ export default function Chessboard() {
         moves.allKills = moves.allKills.filter((move) =>
           isSafe(move, figureIsSelected.color)
         );
+
+        moves.castling = moves.castling.filter((castling) => {
+          if (
+            isSafe(castling.coords, figureIsSelected.color) &&
+            isSafe(
+              Coords(figureIsSelected.row, figureIsSelected.column),
+              figureIsSelected.color
+            )
+          ) {
+            return true;
+          } else {
+            moves.allMoves.pop();
+          }
+        });
       }
+
       setAvailableMoves(moves.allMoves);
       setAvailableKills(moves.allKills);
       setCastling(moves.castling);
     }
   }, [figureIsSelected]);
-  useEffect(() => {
-    console.log(figures);
-  }, [turnColor]);
 
   return (
     <>
