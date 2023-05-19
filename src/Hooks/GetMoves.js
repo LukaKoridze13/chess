@@ -8,11 +8,13 @@ import GoLeft from "./GoLeft";
 import GoRight from "./GoRight";
 import LShapeMoves from "./LShapeMoves";
 import Coords from "./Coords";
+import Occuipied from "./Ocuppied";
 export default function GetMoves(figure, figures) {
   const { type, color, row, column, isMoved } = figure;
   const allMoves = [];
   const allKills = [];
   const allDefending = [];
+  let castling = [];
   // for White Pawn
   if (type === "Pawn" && color === "white") {
     if (isMoved) {
@@ -171,7 +173,52 @@ export default function GetMoves(figure, figures) {
       ...frontLeft.defending,
       ...downLeft.defending
     );
+
+    // castling
+    if (!figure.isMoved) {
+      let rooks = figures.filter(
+        (fig) => fig.type === "Rook" && fig.color === figure.color
+      );
+      rooks.forEach((rook) => {
+        if (
+          (rook.row === 1 && rook.column === figure.column) ||
+          (rook.row === 8 && rook.column)
+        ) {
+          let spaceEmpty = true;
+          for (let i = 0; i < Math.abs(figure.row - rook.row); i++) {
+            if (figure.row - rook.row < 0) {
+              let row = figure.row + 1;
+              let column = figure.column;
+              if (Occuipied(row, column, figures)) {
+                spaceEmpty = false;
+              }
+            } else {
+              let row = figure.row - 1;
+              let column = figure.column;
+              if (Occuipied(row, column, figures)) {
+                spaceEmpty = false;
+              }
+            }
+          }
+          if (spaceEmpty) {
+            if (figure.row - rook.row < 0) {
+              allMoves.push(Coords(rook.row - 1, rook.column));
+              castling.push({
+                rook,
+                coords: Coords(rook.row - 1, rook.column),
+              });
+            } else {
+              allMoves.push(Coords(rook.row + 1, rook.column));
+              castling.push({
+                rook,
+                coords: Coords(rook.row + 1, rook.column),
+              });
+            }
+          }
+        }
+      });
+    }
   }
 
-  return { allMoves, allKills, allDefending };
+  return { allMoves, allKills, allDefending, castling };
 }

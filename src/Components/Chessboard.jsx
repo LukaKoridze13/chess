@@ -3,159 +3,160 @@ import { styled } from "styled-components";
 import DrawSquares from "../Hooks/DrawSquares";
 import Coords from "../Hooks/Coords";
 import GetMoves from "../Hooks/GetMoves";
-
+import ReverseCoords from "../Hooks/ReverseCoords";
 export default function Chessboard() {
   const [myColor, setMyColor] = useState("white");
   const [turnColor, setTurnColor] = useState("white");
   const [availableMoves, setAvailableMoves] = useState([]);
   const [availableKills, setAvailableKills] = useState([]);
   const [figureIsSelected, setfigureIsSelected] = useState(false);
+  const [castling, setCastling] = useState(false);
   const [figures, setFigures] = useState([
-    {
-      type: "Pawn",
-      color: "white",
-      row: 1,
-      column: 2,
-      isSelected: false,
-      isDead: false,
-      isMoved: false,
-    },
-    {
-      type: "Pawn",
-      color: "white",
-      row: 2,
-      column: 2,
-      isSelected: false,
-      isDead: false,
-      isMoved: false,
-    },
-    {
-      type: "Pawn",
-      color: "white",
-      row: 3,
-      column: 2,
-      isSelected: false,
-      isDead: false,
-      isMoved: false,
-    },
-    {
-      type: "Pawn",
-      color: "white",
-      row: 4,
-      column: 2,
-      isSelected: false,
-      isDead: false,
-      isMoved: false,
-    },
-    {
-      type: "Pawn",
-      color: "white",
-      row: 5,
-      column: 2,
-      isSelected: false,
-      isDead: false,
-      isMoved: false,
-    },
-    {
-      type: "Pawn",
-      color: "white",
-      row: 6,
-      column: 2,
-      isSelected: false,
-      isDead: false,
-      isMoved: false,
-    },
-    {
-      type: "Pawn",
-      color: "white",
-      row: 7,
-      column: 2,
-      isSelected: false,
-      isDead: false,
-      isMoved: false,
-    },
-    {
-      type: "Pawn",
-      color: "white",
-      row: 8,
-      column: 2,
-      isSelected: false,
-      isDead: false,
-      isMoved: false,
-    },
+    // {
+    //   type: "Pawn",
+    //   color: "white",
+    //   row: 1,
+    //   column: 2,
+    //   isSelected: false,
+    //   isDead: false,
+    //   isMoved: false,
+    // },
+    // {
+    //   type: "Pawn",
+    //   color: "white",
+    //   row: 2,
+    //   column: 2,
+    //   isSelected: false,
+    //   isDead: false,
+    //   isMoved: false,
+    // },
+    // {
+    //   type: "Pawn",
+    //   color: "white",
+    //   row: 3,
+    //   column: 2,
+    //   isSelected: false,
+    //   isDead: false,
+    //   isMoved: false,
+    // },
+    // {
+    //   type: "Pawn",
+    //   color: "white",
+    //   row: 4,
+    //   column: 2,
+    //   isSelected: false,
+    //   isDead: false,
+    //   isMoved: false,
+    // },
+    // {
+    //   type: "Pawn",
+    //   color: "white",
+    //   row: 5,
+    //   column: 2,
+    //   isSelected: false,
+    //   isDead: false,
+    //   isMoved: false,
+    // },
+    // {
+    //   type: "Pawn",
+    //   color: "white",
+    //   row: 6,
+    //   column: 2,
+    //   isSelected: false,
+    //   isDead: false,
+    //   isMoved: false,
+    // },
+    // {
+    //   type: "Pawn",
+    //   color: "white",
+    //   row: 7,
+    //   column: 2,
+    //   isSelected: false,
+    //   isDead: false,
+    //   isMoved: false,
+    // },
+    // {
+    //   type: "Pawn",
+    //   color: "white",
+    //   row: 8,
+    //   column: 2,
+    //   isSelected: false,
+    //   isDead: false,
+    //   isMoved: false,
+    // },
     // -----------
-    {
-      type: "Pawn",
-      color: "black",
-      row: 1,
-      column: 7,
-      isSelected: false,
-      isDead: false,
-      isMoved: false,
-    },
-    {
-      type: "Pawn",
-      color: "black",
-      row: 2,
-      column: 7,
-      isSelected: false,
-      isDead: false,
-      isMoved: false,
-    },
-    {
-      type: "Pawn",
-      color: "black",
-      row: 3,
-      column: 7,
-      isSelected: false,
-      isDead: false,
-      isMoved: false,
-    },
-    {
-      type: "Pawn",
-      color: "black",
-      row: 4,
-      column: 7,
-      isSelected: false,
-      isDead: false,
-      isMoved: false,
-    },
-    {
-      type: "Pawn",
-      color: "black",
-      row: 5,
-      column: 7,
-      isSelected: false,
-      isDead: false,
-      isMoved: false,
-    },
-    {
-      type: "Pawn",
-      color: "black",
-      row: 6,
-      column: 7,
-      isSelected: false,
-      isDead: false,
-      isMoved: false,
-    },
-    {
-      type: "Pawn",
-      color: "black",
-      row: 7,
-      column: 7,
-      isSelected: false,
-      isDead: false,
-      isMoved: false,
-    },
-    {
-      type: "Pawn",
-      color: "black",
-      row: 8,
-      column: 7,
-      isSelected: false,
-      isDead: false,
-      isMoved: false,
-    },
+    // {
+    //   type: "Pawn",
+    //   color: "black",
+    //   row: 1,
+    //   column: 7,
+    //   isSelected: false,
+    //   isDead: false,
+    //   isMoved: false,
+    // },
+    // {
+    //   type: "Pawn",
+    //   color: "black",
+    //   row: 2,
+    //   column: 7,
+    //   isSelected: false,
+    //   isDead: false,
+    //   isMoved: false,
+    // },
+    // {
+    //   type: "Pawn",
+    //   color: "black",
+    //   row: 3,
+    //   column: 7,
+    //   isSelected: false,
+    //   isDead: false,
+    //   isMoved: false,
+    // },
+    // {
+    //   type: "Pawn",
+    //   color: "black",
+    //   row: 4,
+    //   column: 7,
+    //   isSelected: false,
+    //   isDead: false,
+    //   isMoved: false,
+    // },
+    // {
+    //   type: "Pawn",
+    //   color: "black",
+    //   row: 5,
+    //   column: 7,
+    //   isSelected: false,
+    //   isDead: false,
+    //   isMoved: false,
+    // },
+    // {
+    //   type: "Pawn",
+    //   color: "black",
+    //   row: 6,
+    //   column: 7,
+    //   isSelected: false,
+    //   isDead: false,
+    //   isMoved: false,
+    // },
+    // {
+    //   type: "Pawn",
+    //   color: "black",
+    //   row: 7,
+    //   column: 7,
+    //   isSelected: false,
+    //   isDead: false,
+    //   isMoved: false,
+    // },
+    // {
+    //   type: "Pawn",
+    //   color: "black",
+    //   row: 8,
+    //   column: 7,
+    //   isSelected: false,
+    //   isDead: false,
+    //   isMoved: false,
+    // },
     // ------------
     {
       type: "Rook",
@@ -194,98 +195,98 @@ export default function Chessboard() {
       isMoved: false,
     },
     // -----
-    {
-      type: "Knight",
-      color: "white",
-      row: 2,
-      column: 1,
-      isSelected: false,
-      isDead: false,
-      isMoved: false,
-    },
-    {
-      type: "Knight",
-      color: "white",
-      row: 7,
-      column: 1,
-      isSelected: false,
-      isDead: false,
-      isMoved: false,
-    },
-    {
-      type: "Knight",
-      color: "black",
-      row: 2,
-      column: 8,
-      isSelected: false,
-      isDead: false,
-      isMoved: false,
-    },
-    {
-      type: "Knight",
-      color: "black",
-      row: 7,
-      column: 8,
-      isSelected: false,
-      isDead: false,
-      isMoved: false,
-    },
+    // {
+    //   type: "Knight",
+    //   color: "white",
+    //   row: 2,
+    //   column: 1,
+    //   isSelected: false,
+    //   isDead: false,
+    //   isMoved: false,
+    // },
+    // {
+    //   type: "Knight",
+    //   color: "white",
+    //   row: 7,
+    //   column: 1,
+    //   isSelected: false,
+    //   isDead: false,
+    //   isMoved: false,
+    // },
+    // {
+    //   type: "Knight",
+    //   color: "black",
+    //   row: 2,
+    //   column: 8,
+    //   isSelected: false,
+    //   isDead: false,
+    //   isMoved: false,
+    // },
+    // {
+    //   type: "Knight",
+    //   color: "black",
+    //   row: 7,
+    //   column: 8,
+    //   isSelected: false,
+    //   isDead: false,
+    //   isMoved: false,
+    // },
     // ----
-    {
-      type: "Bishop",
-      color: "white",
-      row: 3,
-      column: 1,
-      isSelected: false,
-      isDead: false,
-      isMoved: false,
-    },
-    {
-      type: "Bishop",
-      color: "white",
-      row: 6,
-      column: 1,
-      isSelected: false,
-      isDead: false,
-      isMoved: false,
-    },
-    {
-      type: "Bishop",
-      color: "black",
-      row: 3,
-      column: 8,
-      isSelected: false,
-      isDead: false,
-      isMoved: false,
-    },
-    {
-      type: "Bishop",
-      color: "black",
-      row: 6,
-      column: 8,
-      isSelected: false,
-      isDead: false,
-      isMoved: false,
-    },
+    // {
+    //   type: "Bishop",
+    //   color: "white",
+    //   row: 3,
+    //   column: 1,
+    //   isSelected: false,
+    //   isDead: false,
+    //   isMoved: false,
+    // },
+    // {
+    //   type: "Bishop",
+    //   color: "white",
+    //   row: 6,
+    //   column: 1,
+    //   isSelected: false,
+    //   isDead: false,
+    //   isMoved: false,
+    // },
+    // {
+    //   type: "Bishop",
+    //   color: "black",
+    //   row: 3,
+    //   column: 8,
+    //   isSelected: false,
+    //   isDead: false,
+    //   isMoved: false,
+    // },
+    // {
+    //   type: "Bishop",
+    //   color: "black",
+    //   row: 6,
+    //   column: 8,
+    //   isSelected: false,
+    //   isDead: false,
+    //   isMoved: false,
+    // },
     // -----
-    {
-      type: "Queen",
-      color: "white",
-      row: 4,
-      column: 1,
-      isSelected: false,
-      isDead: false,
-      isMoved: false,
-    },
-    {
-      type: "Queen",
-      color: "black",
-      row: 4,
-      column: 8,
-      isSelected: false,
-      isDead: false,
-      isMoved: false,
-    },
+    // {
+    //   type: "Queen",
+    //   color: "white",
+    //   row: 4,
+    //   column: 1,
+    //   isSelected: false,
+    //   isDead: false,
+    //   isMoved: false,
+    // },
+    // {
+    //   type: "Queen",
+    //   color: "black",
+    //   row: 4,
+    //   column: 8,
+    //   isSelected: false,
+    //   isDead: false,
+    //   isMoved: false,
+    // },
     // ----
     {
       type: "King",
@@ -324,18 +325,34 @@ export default function Chessboard() {
     if (figureIsKilled) {
       figures.splice(figures.indexOf(figureIsKilled), 1);
     }
+    let castlingDone = false;
+    castling.forEach((castling) => {
+      if (castling.coords === Coords(row, column)) {
+        castlingDone = castling;
+      }
+    });
+    if (castlingDone) {
+      let row = ReverseCoords(castlingDone.coords).row;
+      if (row + 1 === 3) {
+        figures[figures.indexOf(castlingDone.rook)].row = row + 1;
+      } else {
+        figures[figures.indexOf(castlingDone.rook)].row = row - 1;
+      }
+    }
     figureIsSelected.row = row;
     figureIsSelected.column = column;
+    figureIsSelected.isMoved = true;
     setFigures([...figures]);
     changeTurn();
   }
 
   function changeTurn() {
     turnColor === "white" ? setTurnColor("black") : setTurnColor("white");
-    myColor === "white" ? setMyColor("black") : setMyColor("white");
+    // myColor === "white" ? setMyColor("black") : setMyColor("white");
     unselectAll();
     setAvailableKills([]);
     setAvailableMoves([]);
+    setCastling([]);
     setfigureIsSelected(false);
   }
 
@@ -350,6 +367,7 @@ export default function Chessboard() {
       let moves = GetMoves(figureIsSelected, figures);
       setAvailableMoves(moves.allMoves);
       setAvailableKills(moves.allKills);
+      setCastling(moves.castling);
     }
   }, [figureIsSelected]);
   // useEffect(() => {
