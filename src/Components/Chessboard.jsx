@@ -6,6 +6,7 @@ import GetMoves from "../Hooks/GetMoves";
 import ReverseCoords from "../Hooks/ReverseCoords";
 import Promotion from "./Promotion";
 import SimulateMove from "../Hooks/SimulateMove";
+import EndMessage from "./EndMessage";
 export default function Chessboard() {
   const [myColor, setMyColor] = useState("white");
   const [turnColor, setTurnColor] = useState("white");
@@ -14,6 +15,7 @@ export default function Chessboard() {
   const [figureIsSelected, setfigureIsSelected] = useState(false);
   const [castling, setCastling] = useState(false);
   const [promotion, setPromotion] = useState(false);
+  const [end, setEnd] = useState(false);
   const [figures, setFigures] = useState([
     {
       type: "Pawn",
@@ -309,7 +311,6 @@ export default function Chessboard() {
       isDead: false,
       isMoved: false,
     },
-
   ]);
   function selectFigureToMove(coords) {
     let figureClicked = figures.find(
@@ -348,7 +349,8 @@ export default function Chessboard() {
     figureIsSelected.row = row;
     figureIsSelected.column = column;
     figureIsSelected.isMoved = true;
-    console.log(isWin(), isDraw());
+    isWin();
+    isDraw();
     setFigures([...figures]);
     changeTurn();
   }
@@ -410,6 +412,9 @@ export default function Chessboard() {
         draw = true;
       }
     }
+    if (draw) {
+      setEnd("draw");
+    }
     return draw;
     // dead position
     // 50-Move Rule
@@ -444,6 +449,9 @@ export default function Chessboard() {
       if (!available) {
         win = true;
       }
+    }
+    if (win) {
+      setEnd(turnColor);
     }
     return win;
   }
@@ -511,6 +519,7 @@ export default function Chessboard() {
           turnColor
         )}
       </Board>
+      {end && <EndMessage end={end}/>}
       {promotion && <Promotion color={promotion.color} promote={promote} />}
     </>
   );
