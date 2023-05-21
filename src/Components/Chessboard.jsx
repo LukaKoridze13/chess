@@ -55,7 +55,7 @@ export default function Chessboard() {
       type: "Pawn",
       color: "white",
       row: 5,
-      column: 3,
+      column: 2,
       isSelected: false,
       isDead: false,
       isMoved: false,
@@ -119,7 +119,7 @@ export default function Chessboard() {
       type: "Pawn",
       color: "black",
       row: 4,
-      column: 6,
+      column: 7,
       isSelected: false,
       isDead: false,
       isMoved: false,
@@ -256,8 +256,8 @@ export default function Chessboard() {
     {
       type: "Bishop",
       color: "black",
-      row: 7,
-      column: 4,
+      row: 3,
+      column: 8,
       isSelected: false,
       isDead: false,
       isMoved: false,
@@ -295,7 +295,7 @@ export default function Chessboard() {
       type: "King",
       color: "white",
       row: 5,
-      column: 2,
+      column: 1,
       isSelected: false,
       isDead: false,
       isMoved: false,
@@ -309,6 +309,7 @@ export default function Chessboard() {
       isDead: false,
       isMoved: false,
     },
+
   ]);
   function selectFigureToMove(coords) {
     let figureClicked = figures.find(
@@ -347,6 +348,7 @@ export default function Chessboard() {
     figureIsSelected.row = row;
     figureIsSelected.column = column;
     figureIsSelected.isMoved = true;
+    console.log(isWin(), isDraw());
     setFigures([...figures]);
     changeTurn();
   }
@@ -382,6 +384,68 @@ export default function Chessboard() {
     } else {
       return true;
     }
+  }
+  function isDraw() {
+    // stalemate, no checkmate no legal moves
+    let draw = false;
+    let figuresList = figures.filter((figure) => figure.color !== turnColor);
+    let king = figures.find(
+      (figure) => figure.color !== turnColor && figure.type === "King"
+    );
+    if (isSafe(Coords(king.row, king.column), king.color)) {
+      let available = false;
+      figuresList.forEach((fig) => {
+        let moves = GetMoves(fig, figures);
+        moves.allMoves = moves.allMoves.filter((move) => {
+          return SimulateMove(figures, fig, move);
+        });
+        moves.allKills = moves.allKills.filter((move) => {
+          return SimulateMove(figures, fig, move);
+        });
+        if (moves.allMoves.length > 0 || moves.allKills.length > 0) {
+          available = true;
+        }
+      });
+      if (!available) {
+        draw = true;
+      }
+    }
+    return draw;
+    // dead position
+    // 50-Move Rule
+    // Threefold Repetition
+    // Mutual Agreement
+    // insuficient figures for checkmate King vs. king
+    // King and bishop vs. king
+    // King and knight vs. king
+    // King and bishop vs. king and bishop of the same color as the opponent's bishop
+  }
+  function isWin() {
+    let win = false;
+    let figuresList = figures.filter((figure) => figure.color !== turnColor);
+    let king = figures.find(
+      (figure) => figure.color !== turnColor && figure.type === "King"
+    );
+    if (!isSafe(Coords(king.row, king.column), king.color)) {
+      let available = false;
+
+      figuresList.forEach((fig) => {
+        let moves = GetMoves(fig, figures);
+        moves.allMoves = moves.allMoves.filter((move) => {
+          return SimulateMove(figures, fig, move);
+        });
+        moves.allKills = moves.allKills.filter((move) => {
+          return SimulateMove(figures, fig, move);
+        });
+        if (moves.allMoves.length > 0 || moves.allKills.length > 0) {
+          available = true;
+        }
+      });
+      if (!available) {
+        win = true;
+      }
+    }
+    return win;
   }
   function isCheck() {
     let checking;
@@ -422,6 +486,9 @@ export default function Chessboard() {
       }
       if (isCheck()) {
         moves.allMoves = moves.allMoves.filter((move) => {
+          return SimulateMove(figures, figureIsSelected, move);
+        });
+        moves.allKills = moves.allKills.filter((move) => {
           return SimulateMove(figures, figureIsSelected, move);
         });
       }
