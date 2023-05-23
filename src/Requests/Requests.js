@@ -1,7 +1,7 @@
 import axios from "axios";
 
 let testing = "http://localhost:3500";
-let deployment = "https://chess-z2o4.onrender.com";
+let deployment = "https://chess-h2ja.onrender.com";
 const api = deployment + "/api/";
 
 export async function loginRequest(username, password) {
