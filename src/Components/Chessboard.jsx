@@ -8,6 +8,7 @@ import Promotion from "./Promotion";
 import SimulateMove from "../Hooks/SimulateMove";
 import EndMessage from "./EndMessage";
 import { socket } from "../Socket";
+import { getRoomRequest } from "../Requests/Requests";
 
 export default function Chessboard(props) {
   const [myColor, setMyColor] = useState("white");
@@ -18,7 +19,7 @@ export default function Chessboard(props) {
   const [castling, setCastling] = useState(false);
   const [promotion, setPromotion] = useState(false);
   const [end, setEnd] = useState(false);
-  const [start,setStart] = useState(props.join)
+  const [start, setStart] = useState(props.join);
 
   const [figures, setFigures] = useState([
     {
@@ -355,12 +356,15 @@ export default function Chessboard(props) {
     figureIsSelected.isMoved = true;
     isWin();
     isDraw();
-    setFigures([...figures]);
     changeTurn();
+    if (!promotion) {
+      updateOnlineBoard(figures);
+    }
+
+    setFigures([...figures]);
+    
   }
   function changeTurn() {
-    turnColor === "white" ? setTurnColor("black") : setTurnColor("white");
-    // myColor === "white" ? setMyColor("black") : setMyColor("white");
     unselectAll();
     setAvailableKills([]);
     setAvailableMoves([]);
@@ -376,6 +380,7 @@ export default function Chessboard(props) {
     newFigure.type = figure;
     figures.splice(figures.indexOf(promotion), 1);
     figures.push(newFigure);
+    updateOnlineBoard(figures);
     setFigures([...figures]);
     setPromotion(false);
   }
@@ -471,15 +476,33 @@ export default function Chessboard(props) {
     );
     return !isSafe(Coords(king.row, king.column), king.color);
   }
-  function onStart() {
-    console.log("Starting")
-    setStart(true)
+  async function onStart() {
+    setStart(true);
+    let room = await getRoomRequest(props.room);
+    let myUser = room.user1.username === props.user ? room.user1 : room.user2;
+    setMyColor(myUser.color);
   }
-
+  function updateOnlineBoard(figures) {
+    let newColor = turnColor === "white" ? "black" : "white";
+    socket.emit("sentUpdate", {
+      figures,
+      room_id: props.room,
+      color: newColor,
+    });
+  }
+  function receivedUpdate(data) {
+    setFigures(data.figures);
+    setTurnColor(data.color);
+  }
   useEffect(() => {
+    if (props.join) {
+      onStart();
+    }
     socket.emit("joinRoom", props.room);
     socket.on("start", onStart);
+    socket.on("receivedUpdate", receivedUpdate);
     return () => {
+      socket.off("receivedUpdate", receivedUpdate);
       socket.off("start", onStart);
     };
   }, []);
@@ -527,15 +550,15 @@ export default function Chessboard(props) {
     <>
       <Error>Room ID: {props.room}</Error>
       <Board color={myColor}>
-        {DrawSquares(
+        {DrawSquares({
           myColor,
           figures,
           availableMoves,
           availableKills,
           selectFigureToMove,
           move,
-          turnColor
-        )}
+          turnColor,
+        })}
       </Board>
       {end && <EndMessage end={end} />}
       {promotion && <Promotion color={promotion.color} promote={promote} />}

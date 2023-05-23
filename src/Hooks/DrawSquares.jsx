@@ -2,15 +2,16 @@ import React from "react";
 import { styled } from "styled-components";
 import Coords from "./Coords";
 import Figure from "../Components/Figure/";
-export default function DrawSquares(
-  myColor,
-  figures,
-  moves,
-  kills,
-  selectFigureToMove,
-  move,
-  turnColor,
-) {
+export default function DrawSquares(obj) {
+  let {
+    myColor,
+    figures,
+    availableMoves,
+    availableKills,
+    selectFigureToMove,
+    move,
+    turnColor,
+  } = obj;
   const squares = [];
   for (let row = 1; row < 9; row++) {
     for (let column = 1; column < 9; column++) {
@@ -41,10 +42,10 @@ export default function DrawSquares(
       squares.push(
         <Square color={squareColor} key={COORDS}>
           {/* If Player Can Go On This Square, it will be green, otherwise it will be red  */}
-          {moves.includes(COORDS) && (
+          {availableMoves.includes(COORDS) && (
             <ColoredSquare type="move" onClick={moveHere} />
           )}
-          {kills.includes(COORDS) && (
+          {availableKills.includes(COORDS) && (
             <ColoredSquare type="kill" onClick={moveHere} />
           )}
           {FIGURE && (

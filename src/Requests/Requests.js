@@ -52,13 +52,26 @@ export async function joinRoomRequest(username, room_id) {
   await axios
     .post(api + "rooms/join", {
       username,
-      room_id
+      room_id,
     })
     .then((response) => {
       value = response.data;
     })
     .catch((error) => {
       value = error.response.data;
+    });
+  return value;
+}
+
+export async function getRoomRequest(room_id) {
+  let value;
+  await axios
+    .get(api + "rooms/" + room_id)
+    .then((response) => {
+      value = response.data.room;
+    })
+    .catch((error) => {
+      value = error.response.data.error;
     });
   return value;
 }

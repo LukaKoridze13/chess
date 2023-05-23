@@ -43,7 +43,7 @@ export default function Figure(props) {
         color: props.color === "white" ? white : black,
         position: "relative",
         zIndex: 5,
-        pointerEvents: props.color !== props.turnColor && "none",
+        pointerEvents: Boolean(props.color !== props.myColor || props.color !== props.turnColor) && "none",
       }}
       onClick={props.onClick}
     />
