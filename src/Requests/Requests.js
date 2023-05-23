@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const api = "http://localhost:3500/api/";
+const api = process.env.REACT_APP_HOST + "/api/";
 
 export async function loginRequest(username, password) {
   let value;
