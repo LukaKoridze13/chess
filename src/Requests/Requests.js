@@ -1,6 +1,8 @@
 import axios from "axios";
 
-const api = process.env.REACT_APP_HOST + "/api/";
+let testing = "http://localhost:3500";
+let deployment = "https://chess-z2o4.onrender.com";
+const api = deployment + "/api/";
 
 export async function loginRequest(username, password) {
   let value;
