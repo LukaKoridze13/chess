@@ -47,6 +47,20 @@ body {
   gap: 50px;
   width: fit-content;
 }
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover, 
+input:-webkit-autofill:focus, 
+input:-webkit-autofill:active{
+    -webkit-box-shadow: 0 0 0 30px rgb(26, 23, 29) inset !important;
+    color: white ;
+    -webkit-text-fill-color: white;
+}
+
+.active{
+  border-bottom: 1px solid white;
+  padding-bottom: 8px;
+}
 @media screen and (min-width: 1920px) {
   .promo {
     font-size: 80px;

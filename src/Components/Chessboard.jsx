@@ -7,7 +7,9 @@ import ReverseCoords from "../Hooks/ReverseCoords";
 import Promotion from "./Promotion";
 import SimulateMove from "../Hooks/SimulateMove";
 import EndMessage from "./EndMessage";
-export default function Chessboard() {
+import { socket } from "../Socket";
+
+export default function Chessboard(props) {
   const [myColor, setMyColor] = useState("white");
   const [turnColor, setTurnColor] = useState("white");
   const [availableMoves, setAvailableMoves] = useState([]);
@@ -16,6 +18,8 @@ export default function Chessboard() {
   const [castling, setCastling] = useState(false);
   const [promotion, setPromotion] = useState(false);
   const [end, setEnd] = useState(false);
+  const [start,setStart] = useState(props.join)
+
   const [figures, setFigures] = useState([
     {
       type: "Pawn",
@@ -467,6 +471,19 @@ export default function Chessboard() {
     );
     return !isSafe(Coords(king.row, king.column), king.color);
   }
+  function onStart() {
+    console.log("Starting")
+    setStart(true)
+  }
+
+  useEffect(() => {
+    socket.emit("joinRoom", props.room);
+    socket.on("start", onStart);
+    return () => {
+      socket.off("start", onStart);
+    };
+  }, []);
+
   useEffect(() => {
     if (figureIsSelected) {
       let moves = GetMoves(figureIsSelected, figures);
@@ -508,6 +525,7 @@ export default function Chessboard() {
 
   return (
     <>
+      <Error>Room ID: {props.room}</Error>
       <Board color={myColor}>
         {DrawSquares(
           myColor,
@@ -519,7 +537,7 @@ export default function Chessboard() {
           turnColor
         )}
       </Board>
-      {end && <EndMessage end={end}/>}
+      {end && <EndMessage end={end} />}
       {promotion && <Promotion color={promotion.color} promote={promote} />}
     </>
   );
@@ -540,4 +558,11 @@ const Board = styled.div`
     width: 100vw;
     height: 100vw;
   }
+`;
+
+const Error = styled.p`
+  font-size: 20px;
+  color: #dd074b;
+  font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
+  text-align: center;
 `;

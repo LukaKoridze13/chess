@@ -1,12 +1,46 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Chessboard from "./Components/Chessboard";
 import { styled } from "styled-components";
+import Room from "./Components/Room";
+import Landing from "./Components/Landing";
+import { socket } from "./Socket";
+export default function App() {
+  const [user, setUser] = useState(false);
+  const [room, setRoom] = useState(false);
+  const [connected, setConnected] = useState(false);
+  const [online, setOnline] = useState(0);
+  const [join, setJoin] = useState(false)
+  function onConnect() {
+    setConnected(true);
+  }
+  function onOnline(number) {
+    setOnline(number);
+  }
 
-export default function Chess() {
+  useEffect(() => {
+    socket.connect();
+    socket.on("connect", onConnect);
+    socket.on("online", onOnline);
+    return () => {
+      socket.disconnect();
+      socket.off("connect", onConnect);
+      socket.off("online", onOnline);
+    };
+  }, []);
+
   return (
-    <Container>
-      <Chessboard />
-    </Container>
+    <>
+      <Online>Players Online: {online}</Online>
+      <Container>
+        {Boolean(!user && connected) && <Landing setUser={setUser} />}{" "}
+        {Boolean(user && !room && connected) && (
+          <Room user={user} setRoom={setRoom} setJoin={setJoin}/>
+        )}
+        {Boolean(user && room && connected) && (
+          <Chessboard user={user} room={room} join={join}/>
+        )}
+      </Container>
+    </>
   );
 }
 
@@ -16,4 +50,13 @@ const Container = styled.div`
   overflow: hidden;
   display: grid;
   place-content: center;
+`;
+
+const Online = styled.p`
+  width: fit-content;
+  position: absolute;
+  z-index: 10000;
+  top: 20px;
+  left: 20px;
+  color: #b30651;
 `;
