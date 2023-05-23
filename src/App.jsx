@@ -9,7 +9,7 @@ export default function App() {
   const [room, setRoom] = useState(false);
   const [connected, setConnected] = useState(false);
   const [online, setOnline] = useState(0);
-  const [join, setJoin] = useState(false)
+  const [join, setJoin] = useState(false);
   function onConnect() {
     setConnected(true);
   }
@@ -34,10 +34,17 @@ export default function App() {
       <Container>
         {Boolean(!user && connected) && <Landing setUser={setUser} />}{" "}
         {Boolean(user && !room && connected) && (
-          <Room user={user} setRoom={setRoom} setJoin={setJoin}/>
+          <Room user={user} setRoom={setRoom} setJoin={setJoin} />
         )}
         {Boolean(user && room && connected) && (
-          <Chessboard user={user} room={room} join={join}/>
+          <Chessboard user={user} room={room} join={join} />
+        )}
+        {!connected && (
+          <Message>
+            Loading... The website is currently using a free hosting service, so
+            if you are the first user in a while, it will take nearly 30 seconds
+            to load the server.
+          </Message>
         )}
       </Container>
     </>
@@ -58,5 +65,15 @@ const Online = styled.p`
   z-index: 10000;
   top: 20px;
   left: 20px;
+  color: #b30651;
+`;
+
+const Message = styled.p`
+  width: fit-content;
+  position: absolute;
+  z-index: 10000;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   color: #b30651;
 `;
