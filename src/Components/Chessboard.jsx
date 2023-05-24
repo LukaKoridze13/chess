@@ -20,7 +20,6 @@ export default function Chessboard(props) {
   const [promotion, setPromotion] = useState(false);
   const [end, setEnd] = useState(false);
   const [start, setStart] = useState(props.join);
-
   const [figures, setFigures] = useState([
     {
       type: "Pawn",
@@ -318,13 +317,15 @@ export default function Chessboard(props) {
     },
   ]);
   function selectFigureToMove(coords) {
-    let figureClicked = figures.find(
-      (figure) => Coords(figure.row, figure.column) === coords
-    );
-    unselectAll();
-    figureClicked.isSelected = true;
-    setfigureIsSelected(figureClicked);
-    setFigures([...figures]);
+    if (start) {
+      let figureClicked = figures.find(
+        (figure) => Coords(figure.row, figure.column) === coords
+      );
+      unselectAll();
+      figureClicked.isSelected = true;
+      setfigureIsSelected(figureClicked);
+      setFigures([...figures]);
+    }
   }
   function move(row, column) {
     let figureIsKilled = figures.find(
@@ -362,7 +363,6 @@ export default function Chessboard(props) {
     }
 
     setFigures([...figures]);
-    
   }
   function changeTurn() {
     unselectAll();
@@ -494,6 +494,15 @@ export default function Chessboard(props) {
     setFigures(data.figures);
     setTurnColor(data.color);
   }
+  function onEnd(data) {
+    setEnd(data);
+  }
+  useEffect(() => {
+    if (end) {
+      socket.emit("end", { room_id: props.room, end });
+    }
+  }, [end]);
+
   useEffect(() => {
     if (props.join) {
       onStart();
@@ -501,7 +510,9 @@ export default function Chessboard(props) {
     socket.emit("joinRoom", props.room);
     socket.on("start", onStart);
     socket.on("receivedUpdate", receivedUpdate);
+    socket.on("onEnd", onEnd);
     return () => {
+      socket.off("onEnd", onEnd);
       socket.off("receivedUpdate", receivedUpdate);
       socket.off("start", onStart);
     };
