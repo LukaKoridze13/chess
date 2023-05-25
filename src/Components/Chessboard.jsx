@@ -380,7 +380,6 @@ export default function Chessboard(props) {
     newFigure.type = figure;
     figures.splice(figures.indexOf(promotion), 1);
     figures.push(newFigure);
-    updateOnlineBoard(figures);
     setFigures([...figures]);
     setPromotion(false);
   }
