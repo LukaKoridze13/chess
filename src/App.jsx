@@ -42,7 +42,7 @@ export default function App() {
         {!connected && (
           <Message>
             Loading... The website is currently using a free hosting service, so
-            if you are the first user in a while, it will take nearly 30 seconds
+            if you are the first user in a while, it will take nearly 50 seconds
             to load the server.
           </Message>
         )}
